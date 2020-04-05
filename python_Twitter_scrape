@@ -6,6 +6,8 @@ import pandas as pd
 
 print("You got this!")
 
+""" These are the access tokens you must get from your Twitter developer account. This is what will allow us to access Twitter's API and pull tweets"""
+
 access_token = ''
 access_token_secret = ''
 consumer_key = ''
