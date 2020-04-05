@@ -1,0 +1,48 @@
+import tweepy
+from tweepy import OAuthHandler
+import pandas as pd
+
+print("You got this!")
+"""I like to have my python script print a message at the beginning. This helps me confirm whether everything is set up correctly. And it's nice to get an uplifting message ;)."""
+
+access_token = ''
+access_token_secret = ''
+consumer_key = ''
+consumer_secret = '
+
+auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+auth.set_access_token(access_token, access_token_secret)
+
+api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
+
+tweets = []
+
+count = 1
+
+"""if you don't add since= as one of the parameters, Twitter will sample the last 7 days worth of data depending
+on how many total tweets there are with the specific hashtag, keyword, or key phrase that you are looking for. You can
+manually add in the number of items (or tweets) you want to get back in the items() section."""
+
+for tweet in tweepy.Cursor(api.search, q="#womenintech", count=450, since='2020-02-28').items(50000):
+	
+	print(count)
+	count += 1
+
+	try: 
+		data = [rtstatus, tweet.created_at, tweet.id, tweet.text, tweet.user._json['screen_name'], tweet.user._json['name'], tweet.user._json['created_at'], tweet.entities['urls']]
+		data = tuple(data)
+		tweets.append(data)
+
+	except tweepy.TweepError as e:
+		print(e.reason)
+		continue
+
+	except StopIteration:
+		break
+
+df = pd.DataFrame(tweets, columns = ['rtstatus','created_at','tweet_id', 'tweet_text', 'screen_name', 'name', 'account_creation_date', 'urls'])
+
+"""add the path to the folder you want to save the CSV file in as well as what you want the CSV file to be named"""
+df.to_csv(path_or_buf = '/Users/Name/Desktop/FolderName/FileName.csv', index=False) 
+
+
